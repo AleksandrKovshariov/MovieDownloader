@@ -1,4 +1,4 @@
-package downloader.generator;
+package fetcher.downloader.generator;
 
 import java.io.IOException;
 import java.net.URL;

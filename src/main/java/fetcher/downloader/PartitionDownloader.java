@@ -1,7 +1,7 @@
-package downloader;
+package fetcher.downloader;
 
-import downloader.exception.ResponseStatusDontMatchException;
-import downloader.generator.GeneratorStrategy;
+import fetcher.downloader.exception.ResponseStatusDontMatchException;
+import fetcher.downloader.generator.GeneratorStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +71,6 @@ public class PartitionDownloader implements Downloader {
         }
     }
 
-    //TODO add retrieving from stategy or list
     private InputStream getStreamPart(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");

@@ -1,6 +1,5 @@
-package downloader.exception;
+package fetcher.downloader.exception;
 
-import java.io.IOError;
 import java.io.IOException;
 
 public class ResponseStatusDontMatchException extends IOException {

@@ -1,8 +1,7 @@
-package downloader.generator;
+package fetcher.downloader.generator;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.function.Function;
 import java.util.function.LongUnaryOperator;
 
 public class IncrementingUrlGenerator implements GeneratorStrategy{
