@@ -1,4 +1,4 @@
-package fetcher.downloader;
+package fetcher.downloader.partition;
 
 import java.io.IOException;
 
