@@ -8,7 +8,11 @@ import java.net.URL;
 import java.util.List;
 
 public class UrlListPartitionDownloader extends PartitionDownloader {
-    private List<URL> urlList;
+    protected List<URL> urlList;
+
+    protected UrlListPartitionDownloader(String fileName){
+        super(fileName);
+    }
 
     public UrlListPartitionDownloader(List<URL> urlList, String fileName) {
         super(fileName);
