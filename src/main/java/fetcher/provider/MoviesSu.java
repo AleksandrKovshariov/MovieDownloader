@@ -1,5 +1,6 @@
 package fetcher.provider;
 
+import fetcher.provider.exception.QualityUrlNotFoundException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -77,13 +78,19 @@ public class MoviesSu {
         String netData = ((JavascriptExecutor)webDriver).executeScript(netstat).toString();
         System.out.println(netData);
 
-        //-1 check
-        int index = netData.indexOf("https://m2x.vidcloud9.com/");
-        String first = netData.substring(index, netData.indexOf(",", index));
-        URL max = new MoviesSuQualityResolver(new URL(first)).getMaxQualityUrl();
+        String qualityUrl = getQualityUrl(netData);
+        URL max = new MoviesSuQualityResolver(new URL(qualityUrl)).getMaxQualityUrl();
         MovieSuDownloader downloader = new MovieSuDownloader(movieName + ".ts", max);
-        downloader.download();
+//        downloader.download();
 
+    }
+
+    private String getQualityUrl(String netData){
+        int index = netData.indexOf("https://m2x.vidcloud9.com/");
+        if(index == -1){
+            throw new QualityUrlNotFoundException("Quality url not found");
+        }
+        return netData.substring(index, netData.indexOf(",", index));
     }
 
 
