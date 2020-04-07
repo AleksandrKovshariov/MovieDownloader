@@ -22,6 +22,7 @@ public class MoviesSu {
     public static final Map<String, String> ADDITIONAL_HEADERS = Collections.singletonMap("Referer", "https://vidcloud9.com/");
     public static final String NAME_CSS_SELECTOR = "div .mvic-desc h3";
     public static final String DEFAULT_MOVIE_NAME = "DefaultMovieName";
+    public static final String NETWORK_STATUS_SCRIPT = "var network = performance.getEntries() || {}; return network;";
     public static final int IFRAME_WAIT = 15;
     private WebDriver webDriver;
 
@@ -53,17 +54,8 @@ public class MoviesSu {
 
         webDriver.get(episodeRef);
 
-        WebDriverWait wait = new WebDriverWait(webDriver, IFRAME_WAIT);
-
-        wait.until((ExpectedCondition<Boolean>) driver -> {
-            WebElement iframe = driver.findElement(By.id("iframe-embed"));
-            return !iframe.getAttribute("src").isBlank();
-        });
-
-        WebElement source = webDriver.findElement(By.id("iframe-embed"));
-        String url = source.getAttribute("src");
         String movieName = getMovieName();
-        webDriver.get(url);
+        webDriver.get(getIframeLink());
         WebElement webElement = webDriver.findElement(By.id("myVideo"));
         webElement.click();
         //TODO refactor
@@ -74,8 +66,7 @@ public class MoviesSu {
         }
 
 
-        String netstat = "var network = performance.getEntries() || {}; return network;";
-        String netData = ((JavascriptExecutor)webDriver).executeScript(netstat).toString();
+        String netData = ((JavascriptExecutor)webDriver).executeScript(NETWORK_STATUS_SCRIPT).toString();
         System.out.println(netData);
 
         String qualityUrl = getQualityUrl(netData);
@@ -83,6 +74,18 @@ public class MoviesSu {
         MovieSuDownloader downloader = new MovieSuDownloader(movieName + ".ts", max);
 //        downloader.download();
 
+    }
+
+    private String getIframeLink(){
+        WebDriverWait wait = new WebDriverWait(webDriver, IFRAME_WAIT);
+
+        wait.until((ExpectedCondition<Boolean>) driver -> {
+            WebElement iframe = driver.findElement(By.id("iframe-embed"));
+            return !iframe.getAttribute("src").isBlank();
+        });
+
+        WebElement source = webDriver.findElement(By.id("iframe-embed"));
+        return source.getAttribute("src");
     }
 
     private String getQualityUrl(String netData){
