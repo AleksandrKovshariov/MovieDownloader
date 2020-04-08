@@ -44,7 +44,7 @@ public class MoviesSu {
             WebElement name = webDriver.findElement(By.cssSelector(NAME_CSS_SELECTOR));
             return name.getText();
         }catch (NoSuchElementException e){
-            log.error("Movie name not found using defalut name", e);
+            log.error("Movie name not found using default name", e);
             return DEFAULT_MOVIE_NAME;
         }
     }
@@ -72,7 +72,7 @@ public class MoviesSu {
         String qualityUrl = getQualityUrl(netData);
         URL max = new MoviesSuQualityResolver(new URL(qualityUrl)).getMaxQualityUrl();
         MovieSuDownloader downloader = new MovieSuDownloader(movieName + ".ts", max);
-//        downloader.download();
+        downloader.download();
 
     }
 
@@ -89,11 +89,12 @@ public class MoviesSu {
     }
 
     private String getQualityUrl(String netData){
-        int index = netData.indexOf("https://m2x.vidcloud9.com/");
+        int index = netData.indexOf("vidcloud9.com/videos");
         if(index == -1){
             throw new QualityUrlNotFoundException("Quality url not found");
         }
-        return netData.substring(index, netData.indexOf(",", index));
+        int withProtocol = netData.lastIndexOf("http", index);
+        return netData.substring(withProtocol, netData.indexOf(",", index));
     }
 
 
